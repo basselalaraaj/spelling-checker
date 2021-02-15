@@ -1,0 +1,35 @@
+@keyframes wiggle {
+    0% {
+      transform: translateY(50%);
+    }
+    35% {
+      transform: translateY(100%);
+    }
+    70% {
+      transform: translateY(50%);
+    }
+    100% {
+      transform: translateY(50%);
+    }
+  }
+  
+  .loading-block-container {
+    display: flex;
+    height: 30px;
+    justify-content: center;
+    margin: 1em;
+  }
+  
+  @for $i from 1 through 3 {
+    .loading-block:nth-child(#{$i}) {
+      transform: translateY(50%);
+      margin: 2px;
+      border-radius: 3px;
+      width: 10px;
+      height: 10px;
+      background: #444;
+      animation: wiggle 1.2s infinite;
+      animation-delay: #{$i*200}ms;
+    }
+  }
+  
