@@ -26,21 +26,14 @@ const checkSpelling = async (url: string, corpus: string) => {
 };
 
 const checkingSpelling = async (url: string, corpus: string) => {
-  const spellingChecked: { start: number; end: number }[] = await checkSpelling(
+  const misspelledWords: { start: number; end: number }[] = await checkSpelling(
     url,
     corpus
   );
 
-  const misspelledWords = spellingChecked.map(({ start, end }) => {
-    return {
-      misspelledWord: corpus.slice(start, end),
-    };
-  });
-
-  console.log("misspelledWords", misspelledWords);
-
   const newWords = await Promise.all(
-    misspelledWords.map(async ({ misspelledWord }) => {
+    misspelledWords.map(async ({ start, end }) => {
+      const misspelledWord = corpus.slice(start, end);
       const corrections = await getCorrections(url, misspelledWord);
       const correction = corrections ? corrections[0] : misspelledWord;
       return { misspelledWord, correctWord: correction };
@@ -49,9 +42,11 @@ const checkingSpelling = async (url: string, corpus: string) => {
 
   console.log("newWords", newWords);
 
-  const newCorpus = newWords.reduce((acc, { misspelledWord, correctWord }) => {
-    return acc.replace(misspelledWord, correctWord);
-  }, corpus);
+  const newCorpus = newWords.reduce(
+    (acc, { misspelledWord, correctWord }) =>
+      acc.replace(misspelledWord, correctWord),
+    corpus
+  );
 
   console.log("newCorpus", newCorpus);
 
