@@ -35,8 +35,8 @@ const checkingSpelling = async (url: string, corpus: string) => {
     misspelledWords.map(async ({ start, end }) => {
       const misspelledWord = corpus.slice(start, end);
       const corrections = await getCorrections(url, misspelledWord);
-      const correction = corrections ? corrections[0] : misspelledWord;
-      return { misspelledWord, correctWord: correction };
+      const correctWord = corrections ? corrections[0] : misspelledWord;
+      return { misspelledWord, correctWord };
     })
   );
 
